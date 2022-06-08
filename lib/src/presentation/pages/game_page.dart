@@ -13,49 +13,65 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   int _counter = 0;
-  SnakeEntity Snake = SnakeEntity(name: 'Snake');
-  ValueNotifier position = ValueNotifier<Offset>(Offset(20, 80));
+  SnakeEntity snake = SnakeEntity(name: 'Snake');
+
+  late ValueNotifier position;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    position = ValueNotifier<Offset>(
+        Offset(snake.headPosition['dx'], snake.headPosition['dy']));
   }
 
   void _incrementSize() {
     setState(() {
       _counter++;
-      Snake.grow();
+      snake.grow();
     });
   }
 
   void _moveLeft() {
     if (position.value.dx > 10) {
-      position.value = Offset(position.value.dx - 10, position.value.dy);
+      snake.move('left');
+      position.value =
+          Offset(snake.headPosition['dx'], snake.headPosition['dy']);
+      print(snake.moveDirection);
     }
   }
 
   void _moveRight() {
-    if (position.value.dy < MediaQuery.of(context).size.width - 10) {
-      position.value = Offset(position.value.dx + 10, position.value.dy);
+    if (position.value.dx < MediaQuery.of(context).size.width - 50) {
+      snake.move('right');
+      position.value =
+          Offset(snake.headPosition['dx'], snake.headPosition['dy']);
+      print(snake.moveDirection);
     }
   }
 
   void _moveUp() {
     if (position.value.dy > 10) {
-      position.value = Offset(position.value.dx, position.value.dy - 10);
+      snake.move('up');
+      position.value =
+          Offset(snake.headPosition['dx'], snake.headPosition['dy']);
+      print(snake.moveDirection);
     }
   }
 
   void _moveDown() {
-    if (position.value.dy < MediaQuery.of(context).size.height - 10) {
-      position.value = Offset(position.value.dx, position.value.dy + 10);
+    if (position.value.dy < MediaQuery.of(context).size.height - 100) {
+      snake.move('down');
+      position.value =
+          Offset(snake.headPosition['dx'], snake.headPosition['dy']);
+      print(snake.moveDirection);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    print(screenSize * 0.1);
     return RawKeyboardListener(
       focusNode: FocusNode(),
       onKey: (event) {
@@ -86,8 +102,8 @@ class _GamePageState extends State<GamePage> {
                     top: position.value.dy,
                     child: Container(
                       color: Colors.white,
-                      width: (screenSize.width * 0.1) * Snake.part,
-                      height: (screenSize.width * 0.1) * Snake.part,
+                      width: (snake.snakeSize),
+                      height: (snake.snakeSize),
                     ),
                   ),
                 ),
