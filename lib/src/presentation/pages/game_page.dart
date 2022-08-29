@@ -102,7 +102,7 @@ class _GamePageState extends State<GamePage> {
                     top: position.value.dy,
                     child: Container(
                       color: Colors.white,
-                      width: (snake.snakeSize),
+                      width: (snake.snakeSize)*2,
                       height: (snake.snakeSize),
                     ),
                   ),
